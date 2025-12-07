@@ -53,3 +53,6 @@ VM networking failures
 *OUTCOME*
 
 Successfully brute-forced the SSH root password through Hydra using a contained, reproducible target environment.
+
+<--------- Refer to Screenshots
+

